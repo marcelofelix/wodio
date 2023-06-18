@@ -1,6 +1,6 @@
 <template>
   <section class="q-pa-sm timer">
-    <section class="text-center text-h2 text-blue-3" @click="toggle">
+    <section class="text-center text-blue-3" @click="toggle">
       {{ value }}
     </section>
   </section>
@@ -42,6 +42,10 @@ export default {
         }, 1000)
       }
     },
+    reset() {
+      this.interval = null
+      this.value = this.duration
+    }
   }
 }
 </script>

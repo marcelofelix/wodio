@@ -3,19 +3,21 @@
     <header class="text-h4 text-weight-bolder text-center q-pa-sm">
         {{ title }}
     </header>
-    <count-down
-      v-show="isPreparing"
-      ref="timer"
-      :duration="countDown"
-      @complete="start"
-    ></count-down>
-    <section v-show="isConfiguring">
+    <section v-show="isPreparing" class="column col-grow justify-center">
+      <count-down
+        ref="timer"
+        class="text-h1"
+        :duration="countDown"
+        @complete="start"
+      ></count-down>
+    </section>
+    <section v-show="isConfiguring" class="column col-grow justify-center">
       <slot name="configure"></slot>
     </section>
-    <section v-show="isRunning">
+    <section v-show="isRunning" class="column col-grow justify-center">
       <slot name="running"></slot>
     </section>
-    <section v-show="isCompleted">
+    <section v-show="isCompleted" class="column col-grow justify-center">
       <slot name="completed">
       </slot>
     </section>
@@ -61,10 +63,9 @@ export default {
     complete() {
       this.stage = 'completed'
     },
-    restart() {
+    reset() {
       this.stage = 'configuring'
-      this.$refs.timer.stop()
-      this.$emit('restart')
+      this.$refs.timer.reset()
     }
   }
 }

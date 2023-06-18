@@ -1,11 +1,11 @@
 <template>
-  <section class="column q-gutter-sm">
-    <section class="timer text-center text-h2 text-blue-3" @click="toggle">
-      {{ display }}
-    </section>
-    <section class="text-center text-h7 text-white" @click="toggle">
-      Time cap: {{ displayTarget }}
-    </section>
+  <section class="column">
+    <timer-display 
+      :value="value"
+      class="timer text-center text-h1 text-blue-3"
+      @click="toggle"
+    >
+    </timer-display>
     <q-linear-progress
       :value="progress"
       :animation-speed="100"
@@ -15,39 +15,24 @@
   </section>
 </template>
 <script>
-import moment from 'moment'
+import TimerDisplay from './TimerDisplay.vue'
 
 export default {
   name: 'StopWatch',
+  components: { TimerDisplay },
   props: {
     duration: { type: Number, default: 0 },
   },
   data() {
     return {
       running: false,
-      unit: 'second',
       interval: null,
-      timer: moment.duration(),
+      value: 0
     }
   },
   computed: {
-    format() {
-      let value = ''
-      if (this.duration > 3600) { value = 'HH:' }
-      if (this.duration > 59) { value += 'mm:' }
-      return value += 'ss'
-    },
-    display() {
-      return moment.utc(this.timer.asMilliseconds()).format(this.format)
-    },
-    target() {
-      return moment.duration({seconds: this.duration})
-    },
-    displayTarget() {
-      return  moment.utc(this.target.asMilliseconds()).format(this.format)
-    },
     progress() {
-      return this.timer.asMilliseconds() / this.target.asMilliseconds()
+      return this.value / this.duration
     }
   },
   methods: {
@@ -55,22 +40,23 @@ export default {
       this.running ? this.pause() : this.start()
     },
     add() {
-      this.timer.add(1, this.unit)
-      // this.beep.play()
-      if (this.timer.asMilliseconds() >= this.target.asMilliseconds()) {
-        this.complete()
-      }
+      if (this.value < this.duration) this.value += 1
+      if (this.value >= this.duration) this.complete()
     },
     subtract() {
-      this.timer.subtract(1, this.unit)
+      this.value -= 1
     },
     stop() {
       this.pause()
-      this.timer = moment.duration()
+      this.timer = 0
     },
     complete() {
       this.pause()
       this.$emit('complete')
+    },
+    reset() {
+      this.interval = null
+      this.value = 0
     },
     start() {
       if (!this.interval) {

@@ -13,7 +13,15 @@
       </header>
       <template v-slot:configure>
         <section class="column q-gutter-md">
-          <time-cap v-model="duration"></time-cap>
+          <time-cap 
+            class="text-h3" 
+            v-model="duration"
+          ></time-cap>
+          {{ duration }}
+          <q-input
+            v-model="wod"
+            type="textarea"
+          ></q-input>
           <q-btn
             color="blue-9"
             size="lg"
@@ -24,32 +32,24 @@
         </section>
       </template>
       <template v-slot:running>
-        <section class="column q-gutter-md">
-          <for-time 
-            ref="timer"
-            :duration="duration"
-            @complete="complete"
-          ></for-time>    
-          <q-btn
-            color="blue-9"
-            size="lg"
-            flat
-            icon="pause"
-            @click="pause"
-          ></q-btn>
-        </section>
+        <for-time 
+          ref="timer"
+          :duration="duration"
+          :wod="wod"
+          @complete="complete"
+        ></for-time>    
       </template>
       <template v-slot:completed>
         <section class="column q-gutter-md">
           <section class="text-h1 text-center q-pt-md text-teal-3">
-            Parabens!
+            <q-icon name="workspace_premium" size="200px" color="purple-12"></q-icon>
           </section>
           <q-btn
             color="blue-9"
             size="lg"
             flat
             icon="refresh"
-            @click="restart"
+            @click="reset"
           ></q-btn>
         </section>
       </template>
@@ -66,7 +66,15 @@ export default {
   mixins: [TimerEvent],
   data() {
     return {
-      duration: 10
+      duration: 10,
+      wod: `666
+6 Rounds For Time
+6 Front Squat
+6 Pull-Ups
+6 Branch Presses
+6 Deadlifts
+6 Barbell Rows
+6 Shoulder to Overheads`
     }
   },
   methods: {
@@ -82,8 +90,9 @@ export default {
     onComplete() {
       this.$refs.wod.complete()
     },
-    restart() {
-      this.$refs.wod.restart()
+    reset() {
+      this.$refs.timer.reset()
+      this.$refs.wod.reset()
     }
   }
 }

@@ -1,10 +1,9 @@
 <template>
-  <q-layout view="lHh Lpr lFf" class="relative-position">
-
-    <q-page-container class="absolute fit">
+  <section class="fit q-pa-md">
+    <section class="fit">
       <router-view></router-view>
-    </q-page-container>
-  </q-layout>
+    </section>
+  </section>
 </template>
 
 <script>

@@ -7,9 +7,9 @@
         @complete="complete"
       ></stop-watch>
     </section>
-    <section class="col-grow">
+    <pre class="col-grow q-pa-lg text-body2">
       {{ wod }}
-    </section>
+    </pre>
   </section>
 </template>
 <script>
@@ -32,6 +32,9 @@ export default {
     },
     onPause() {
       this.$refs.timer.pause()
+    },
+    reset() {
+      this.$refs.timer.reset()
     },
     onComplete() {
       this.$emit('complete')
